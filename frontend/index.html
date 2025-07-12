@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de Débitos</title>
+</head>
+<body>
+  <h2>Consultar Débito</h2>
+  <input type="text" id="codigo" placeholder="Digite seu código (ex: CPF)">
+  <button onclick="consultar()">Consultar</button>
+  <div id="resultado"></div>
+
+  <script>
+    function consultar() {
+      const codigo = document.getElementById('codigo').value;
+      fetch(`http://localhost:3001/consulta/${codigo}`)
+        .then(res => res.json())
+        .then(data => {
+          const resultado = document.getElementById('resultado');
+          resultado.innerHTML = '';
+          if (data.length === 0) {
+            resultado.innerHTML = 'Nenhum débito encontrado.';
+          } else {
+            data.forEach(item => {
+              resultado.innerHTML += `
+                <div>
+                  <strong>${item.nome}</strong><br>
+                  Valor: R$ ${item.valor.toFixed(2)}<br>
+                  Vencimento: ${item.vencimento}<br>
+                  Descrição: ${item.descricao}<br>
+                  Status: ${item.status}<br><hr>
+                </div>
+              `;
+            });
+          }
+        });
+    }
+  </script>
+</body>
+</html>

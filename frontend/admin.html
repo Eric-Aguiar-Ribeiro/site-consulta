@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - Upload de Planilha</title>
+</head>
+<body>
+  <h2>Upload de Planilha</h2>
+  <form id="formUpload" enctype="multipart/form-data">
+    <input type="file" name="planilha" accept=".xlsx">
+    <button type="submit">Enviar</button>
+  </form>
+  <div id="msg"></div>
+
+  <script>
+    document.getElementById('formUpload').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      fetch('http://localhost:3001/admin/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + btoa('admin:123456')
+        },
+        body: formData
+      })
+      .then(res => res.text())
+      .then(data => document.getElementById('msg').innerText = data);
+    });
+  </script>
+</body>
+</html>
